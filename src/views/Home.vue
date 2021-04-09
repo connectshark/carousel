@@ -1,5 +1,24 @@
 <template>
   <div class="home">
+    <div class="carousel">
+      <div class="container">
+        <figure class="carousel-item" v-for="(img, index) in imgLength" :key="index">
+          <img :src="'http://fakeimg.pl/440x300/282828/EAE0D0/?text=' + img" alt="img">
+        </figure>
+      </div>
+    </div>
+    <div class="nav">
+      <div class="target-btn-group">
+        <input type="button" value="<" @click="change(-1)">
+        <input type="button"
+          v-for="(item, index) in imgLength" :key="index"
+          class="target-btn"
+          :value="item"
+          @click.stop="show = item"
+        >
+        <input type="button" value=">" @click="change(1)">
+      </div>
+    </div>
   </div>
 </template>
 
@@ -7,7 +26,56 @@
 
 export default {
   name: 'Home',
-  components: {
+  data () {
+    return {
+      show: 1,
+      imgLength: 6
+    }
+  },
+  methods: {
+    change (value) {
+      const show = this.show
+      const sum = show + value
+      if (sum < 1) {
+        this.show = this.imgLength
+      } else if (sum > this.imgLength) {
+        this.show = 1
+      } else {
+        this.show = sum
+      }
+    }
+  },
+  watch: {
+    show (newValue) {
+      document.querySelector(':root').style.setProperty('--show', newValue)
+    }
+  },
+  mounted () {
+    document.querySelector(':root').style.setProperty('--show', this.show)
   }
 }
 </script>
+
+<style lang="scss" scoped>
+:root{
+  --show: 0
+}
+.carousel{
+  width: 440px;
+  height: 300px;
+  overflow: hidden;
+  margin: auto;
+  .container{
+    position: relative;
+    width: calc(440px * 6);
+    left: calc((var(--show) - 1) * -440px);
+    transition: left .5s;
+    .carousel-item{
+      display: inline-block;
+      img{
+        vertical-align: middle;
+      }
+    }
+  }
+}
+</style>
