@@ -9,6 +9,22 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/classic',
+    name: 'classic',
+    component: () => import('../views/classic.vue')
+  },
+  {
+    path: '/listView',
+    name: 'listView',
+    component: () => import('../views/listView.vue')
+  },
+  {
+    path: '*',
+    redirect: {
+      name: 'Home'
+    }
   }
 ]
 
